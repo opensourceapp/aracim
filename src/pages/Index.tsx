@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { checklistData } from "@/data/checklistData";
+import { checklistData, type ItemTag } from "@/data/checklistData";
 import { useChecklist } from "@/hooks/useChecklist";
 import { Check, ChevronDown, ChevronRight, RotateCcw, AlertTriangle, Lightbulb, PartyPopper } from "lucide-react";
+
+type Filter = "all" | "critical" | "tip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +20,7 @@ import { cn } from "@/lib/utils";
 const Index = () => {
   const { checked, toggle, reset, checkedCount, totalItems, percentage, isComplete, getSectionProgress } = useChecklist();
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
+  const [filter, setFilter] = useState<Filter>("all");
 
   const toggleSection = (index: number) => {
     setCollapsed((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -90,6 +93,33 @@ const Index = () => {
               </div>
             </div>
           </div>
+
+          {/* Filter Chips */}
+          <div className="flex gap-2 mt-2">
+            {([
+              { value: "all" as Filter, label: "Tümü", icon: null },
+              { value: "critical" as Filter, label: "Kritik", icon: AlertTriangle },
+              { value: "tip" as Filter, label: "İpucu", icon: Lightbulb },
+            ]).map(({ value, label, icon: Icon }) => (
+              <button
+                key={value}
+                onClick={() => setFilter(filter === value ? "all" : value)}
+                className={cn(
+                  "flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border transition-colors",
+                  filter === value
+                    ? value === "critical"
+                      ? "bg-amber-100 border-amber-300 text-amber-700"
+                      : value === "tip"
+                        ? "bg-blue-100 border-blue-300 text-blue-600"
+                        : "bg-primary text-primary-foreground border-primary"
+                    : "bg-secondary border-border text-muted-foreground"
+                )}
+              >
+                {Icon && <Icon className="h-3 w-3" />}
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -110,6 +140,11 @@ const Index = () => {
           const progress = getSectionProgress(sectionIndex);
           const isCollapsed = collapsed[sectionIndex];
           const sectionDone = progress.checked === progress.total;
+          const filteredItems = filter === "all"
+            ? section.items
+            : section.items.filter((item) => item.tag === filter);
+
+          if (filteredItems.length === 0) return null;
 
           return (
             <div key={sectionIndex} className="border-b border-border">
@@ -139,7 +174,8 @@ const Index = () => {
               {/* Items */}
               {!isCollapsed && (
                 <div>
-                  {section.items.map((item, itemIndex) => {
+                  {filteredItems.map((item) => {
+                    const itemIndex = section.items.indexOf(item);
                     const key = `${sectionIndex}-${itemIndex}`;
                     const isChecked = !!checked[key];
 
@@ -151,7 +187,7 @@ const Index = () => {
                           "w-full flex items-center gap-3 px-4 py-3 min-h-[48px] text-left transition-colors active:bg-muted/60",
                           item.tag === "critical" && "border-l-3 border-l-amber-500",
                           item.tag === "tip" && "border-l-3 border-l-blue-400",
-                          itemIndex < section.items.length - 1 && "border-b border-border/50"
+                          filteredItems.indexOf(item) < filteredItems.length - 1 && "border-b border-border/50"
                         )}
                       >
                         {/* Checkbox */}
