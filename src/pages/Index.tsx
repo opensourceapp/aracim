@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 const Index = () => {
   const { checked, toggle, reset, checkedCount, totalItems, percentage, isComplete, getSectionProgress } = useChecklist();
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
+  const [filter, setFilter] = useState<Filter>("all");
 
   const toggleSection = (index: number) => {
     setCollapsed((prev) => ({ ...prev, [index]: !prev[index] }));
