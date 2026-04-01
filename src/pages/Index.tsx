@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { checklistData } from "@/data/checklistData";
+import { checklistData, type ItemTag } from "@/data/checklistData";
 import { useChecklist } from "@/hooks/useChecklist";
 import { Check, ChevronDown, ChevronRight, RotateCcw, AlertTriangle, Lightbulb, PartyPopper } from "lucide-react";
+
+type Filter = "all" | "critical" | "tip";
 import {
   AlertDialog,
   AlertDialogAction,
