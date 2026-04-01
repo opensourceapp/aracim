@@ -140,6 +140,11 @@ const Index = () => {
           const progress = getSectionProgress(sectionIndex);
           const isCollapsed = collapsed[sectionIndex];
           const sectionDone = progress.checked === progress.total;
+          const filteredItems = filter === "all"
+            ? section.items
+            : section.items.filter((item) => item.tag === filter);
+
+          if (filteredItems.length === 0) return null;
 
           return (
             <div key={sectionIndex} className="border-b border-border">
