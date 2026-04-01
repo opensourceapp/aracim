@@ -187,7 +187,7 @@ const Index = () => {
                           "w-full flex items-center gap-3 px-4 py-3 min-h-[48px] text-left transition-colors active:bg-muted/60",
                           item.tag === "critical" && "border-l-3 border-l-amber-500",
                           item.tag === "tip" && "border-l-3 border-l-blue-400",
-                          itemIndex < section.items.length - 1 && "border-b border-border/50"
+                          filteredItems.indexOf(item) < filteredItems.length - 1 && "border-b border-border/50"
                         )}
                       >
                         {/* Checkbox */}
