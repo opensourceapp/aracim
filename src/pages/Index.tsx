@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const Index = () => {
-  const { checked, toggle, reset, checkedCount, totalItems, percentage, isComplete, getSectionProgress } = useChecklist();
+  const { items, toggle, reset, checkedCount, totalItems, percentage, isComplete, getSectionProgress } = useChecklist();
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -139,7 +139,7 @@ const Index = () => {
         {checklistData.map((section, sectionIndex) => {
           const progress = getSectionProgress(sectionIndex);
           const isCollapsed = collapsed[sectionIndex];
-          const sectionDone = progress.checked === progress.total;
+          const sectionDone = progress.done === progress.total;
           const filteredItems = filter === "all"
             ? section.items
             : section.items.filter((item) => item.tag === filter);
@@ -167,7 +167,7 @@ const Index = () => {
                     ? "bg-green-100 text-green-700"
                     : "bg-secondary text-muted-foreground"
                 )}>
-                  {progress.checked}/{progress.total}
+                  {progress.done}/{progress.total}
                 </span>
               </button>
 
@@ -177,7 +177,7 @@ const Index = () => {
                   {filteredItems.map((item) => {
                     const itemIndex = section.items.indexOf(item);
                     const key = `${sectionIndex}-${itemIndex}`;
-                    const isChecked = !!checked[key];
+                    const isChecked = !!items[key];
 
                     return (
                       <button
