@@ -90,10 +90,34 @@ const Index = () => {
                   )}
                   style={{ width: `${percentage}%` }}
                 />
-              </div>
-            </div>
+          {/* Filter Chips */}
+          <div className="flex gap-2 mt-2">
+            {([
+              { value: "all" as Filter, label: "Tümü", icon: null },
+              { value: "critical" as Filter, label: "Kritik", icon: AlertTriangle },
+              { value: "tip" as Filter, label: "İpucu", icon: Lightbulb },
+            ]).map(({ value, label, icon: Icon }) => (
+              <button
+                key={value}
+                onClick={() => setFilter(filter === value ? "all" : value)}
+                className={cn(
+                  "flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border transition-colors",
+                  filter === value
+                    ? value === "critical"
+                      ? "bg-amber-100 border-amber-300 text-amber-700"
+                      : value === "tip"
+                        ? "bg-blue-100 border-blue-300 text-blue-600"
+                        : "bg-primary text-primary-foreground border-primary"
+                    : "bg-secondary border-border text-muted-foreground"
+                )}
+              >
+                {Icon && <Icon className="h-3 w-3" />}
+                {label}
+              </button>
+            ))}
           </div>
         </div>
+      </div>
       </div>
 
       {/* Success Banner */}
