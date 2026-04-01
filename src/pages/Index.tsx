@@ -90,6 +90,10 @@ const Index = () => {
                   )}
                   style={{ width: `${percentage}%` }}
                 />
+              </div>
+            </div>
+          </div>
+
           {/* Filter Chips */}
           <div className="flex gap-2 mt-2">
             {([
@@ -117,7 +121,6 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </div>
       </div>
 
       {/* Success Banner */}
