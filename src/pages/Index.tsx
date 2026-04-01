@@ -174,7 +174,8 @@ const Index = () => {
               {/* Items */}
               {!isCollapsed && (
                 <div>
-                  {section.items.map((item, itemIndex) => {
+                  {filteredItems.map((item) => {
+                    const itemIndex = section.items.indexOf(item);
                     const key = `${sectionIndex}-${itemIndex}`;
                     const isChecked = !!checked[key];
 
